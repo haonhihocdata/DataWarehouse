@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="localhost.ExchangeAnalysis_GOOD"
+  DTS:DTSID="{F5E9E4C2-18D1-4492-9782-E7BEE7990FE0}"
+  DTS:CreationName="ADO">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=localhost;Initial Catalog=ExchangeAnalysis_GOOD;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-ETL-{F5E9E4C2-18D1-4492-9782-E7BEE7990FE0}localhost.ExchangeAnalysis_GOOD;Auto Translate=False;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

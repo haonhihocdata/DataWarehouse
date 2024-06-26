@@ -1,0 +1,2038 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/7/2023 5:43:35 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-CLJH20Q"
+  DTS:CreatorName="DESKTOP-CLJH20Q\thuonh"
+  DTS:DTSID="{83285057-7E94-4B4E-BD54-DCBBAC49FACE}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5131.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="FlowLoadFactable"
+  DTS:PackageType="5"
+  DTS:VersionBuild="17"
+  DTS:VersionGUID="{7CF1786A-B36D-42D6-8AA1-A17F66FDA87A}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+      DTS:ObjectName="localhost.ExchangeAnalysisDW 1">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=ExchangeAnalysisDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-FlowLoadFactable-{A5BA670D-24BD-40E7-B522-3397261CA3EE}localhost.ExchangeAnalysisDW 1;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.ExchangeAnalysis_GOOD 1]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{0B5DB63A-66BF-49A0-8F2B-C235CED23813}"
+      DTS:ObjectName="localhost.ExchangeAnalysis_GOOD 1">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=ExchangeAnalysis_GOOD;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{0B5DB63A-66BF-49A0-8F2B-C235CED23813}localhost.ExchangeAnalysis_GOOD 1;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Star Schema"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{a1bad38b-d534-43e2-9fd1-f56f77cd3f70}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Star Schema">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\insert Earning info into Stg_QyuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{ba2605f1-ea39-4a0b-a6bf-f62d218cd7e3}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="insert Earning info into Stg_QyuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="truncate table stgQuarterlyFacts;&#xA;INSERT INTO&#xA;    stgQuarterlyFacts&#xA;(&#xA;[company_id],&#xA;[reported_EPS],&#xA;[surprise_EPS],&#xA;[fiscal_date_ending])&#xA; SELECT&#xA; [company_id],&#xA; [reported_EPS],&#xA; [surprise_EPS],&#xA; [fiscal_date_ending]&#xA; From DimQuarterlyEarnings" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\insert stockdata into Stg_DayFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{0f3bcadb-8647-4cc0-89b7-fbf7cc5971dd}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="insert stockdata into Stg_DayFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="truncate table stgDayFacts;&#xA;INSERT INTO&#xA;    stgDayFacts&#xA;(&#xA;[company_id],&#xA;[open],&#xA;[high],&#xA;[low],&#xA;[close],&#xA;[volume],&#xA;[Daily_Date])&#xA; SELECT&#xA; [company_id],&#xA; [open],&#xA; [high],&#xA; [low],&#xA; [close],&#xA; [volume],&#xA; [stock_date]&#xA; From DimStockPrice" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\Populate Date_Dimension"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{4e7d3f04-ab66-4d73-8f8c-291348f9c4aa}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Populate Date_Dimension"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="SET DATEFIRST  7, -- 1 = Monday, 7 = Sunday&#xA;    DATEFORMAT mdy, &#xA;    LANGUAGE   US_ENGLISH&#xA;&#xA;DECLARE @StartDate  date = '19800101';&#xA;&#xA;DECLARE @CutoffDate date = DATEADD(DAY, -1, DATEADD(YEAR, 60, @StartDate));&#xA;&#xA;WITH seq(n) AS &#xA; (&#xA;   SELECT 0 UNION ALL SELECT n + 1 FROM seq&#xA;   WHERE n &lt; DATEDIFF(DAY, @StartDate, @CutoffDate)&#xA; ),&#xA;d(d) AS &#xA;(&#xA;  SELECT DATEADD(DAY, n, @StartDate) FROM seq&#xA;),&#xA;src AS&#xA;(&#xA;  SELECT&#xA;    TheDate         = CONVERT(date, d),&#xA;    TheDay          = DATEPART(DAY,       d),&#xA;    TheDayName      = DATENAME(WEEKDAY,   d),&#xA;    TheWeek         = DATEPART(WEEK,      d),&#xA;    TheDayOfWeek    = DATEPART(WEEKDAY,   d),&#xA;    TheMonth        = DATEPART(MONTH,     d),&#xA;    TheMonthName    = DATENAME(MONTH,     d),&#xA;    TheQuarter      = DATEPART(Quarter,   d),&#xA;    TheYear         = DATEPART(YEAR,      d)&#xA;  FROM d&#xA;)&#xA;&#xA;INSERT INTO DimDate&#xA;  SELECT * FROM src&#xA;  ORDER BY TheDate&#xA;  OPTION (MAXRECURSION 0);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\TruncateTable"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{876B2D70-B83C-4869-B068-06A41C0699AE}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="TruncateTable"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="  truncate table [FactStockDaily];&#xA;  truncate table [FactStockQuarter];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update CompanyOverview into Stg_QyuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{0b8d9ef9-4107-4aa9-86a9-8dda96d876ab}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update CompanyOverview into Stg_QyuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE stgQuarterlyFacts&#xA;SET stgQuarterlyFacts.[full_time_employees] = DimCompanyOverview.[full_time_employees],&#xA;stgQuarterlyFacts.[market_capitalization] = DimCompanyOverview.[market_capitalization],&#xA;stgQuarterlyFacts.[dividend_per_share] = DimCompanyOverview.[dividend_per_share] ,&#xA;stgQuarterlyFacts.[dividend_yield] = DimCompanyOverview.[dividend_yield]&#xA;&#xA;FROM DimCompanyOverview&#xA;Join stgQuarterlyFacts&#xA;on DimCompanyOverview.[company_id] = stgQuarterlyFacts.[company_id]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update currenct ID and sector ID in Stg_QyuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{e399194c-6b22-4efa-a640-9f2427434357}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update currenct ID and sector ID in Stg_QyuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE stgQuarterlyFacts&#xA;SET stgQuarterlyFacts.[sector_id] = DimSector.[sector_key]&#xA;FROM stgQuarterlyFacts&#xA;full join DimSector&#xA;on stgQuarterlyFacts.[sector] = DimSector.[sector];&#xA;&#xA;&#xA;UPDATE stgQuarterlyFacts&#xA;SET stgQuarterlyFacts.[currency_id] = DimCurrency.[currency_key]&#xA;from stgQuarterlyFacts&#xA;join DimCurrency&#xA;on stgQuarterlyFacts.[currency] = DimCurrency.[currency]&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update current ID and sector ID in Stg_DayFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{99ee121f-9f6d-483b-9d85-0d929f71d09f}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update current ID and sector ID in Stg_DayFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE stgDayFacts&#xA;SET stgDayFacts.[sector_id] = stgQuarterlyFacts.[sector_id],&#xA;stgDayFacts.[currency_id] = stgQuarterlyFacts.[currency_id]&#xA;FROM stgDayFacts&#xA;JOIN stgQuarterlyFacts&#xA;ON stgDayFacts.[company_id] = stgQuarterlyFacts.[company_id]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update dataID into Stg_QyuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{b14e729c-1408-4c5c-9e72-64f979d71fa0}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update dataID into Stg_QyuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE  stgQuarterlyFacts&#xA;SET stgQuarterlyFacts.[date_id] = DimDate.[date_key]&#xA;FROM stgQuarterlyFacts&#xA;JOIN DimDate&#xA;ON stgQuarterlyFacts.[fiscal_date_ending] = DimDate.[TheDate]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\Update dateID into Stg_DayFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{e9dd5ba1-86e2-4bd9-aecc-3ee4ae110f6f}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Update dateID into Stg_DayFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE  stgDayFacts&#xA;SET stgDayFacts.[date_id] = DimDate.[date_key]&#xA;FROM stgDayFacts&#xA;JOIN DimDate&#xA;ON stgDayFacts.[Daily_Date] = DimDate.[TheDate]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update StockDaily_Fact"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{dc7b0730-a868-44f8-b06b-b7f638ff0586}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update StockDaily_Fact"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Star Schema\update StockDaily_Fact\actual daily fact"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="actual daily fact"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[FactStockDaily]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[open]"
+                          cachedDataType="r8"
+                          cachedName="open"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[open]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[open]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[high]"
+                          cachedDataType="r8"
+                          cachedName="high"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[high]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[high]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[low]"
+                          cachedDataType="r8"
+                          cachedName="low"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[low]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[low]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[close]"
+                          cachedDataType="r8"
+                          cachedName="close"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[close]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[close]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[volume]"
+                          cachedDataType="r8"
+                          cachedName="volume"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[volume]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[volume]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[company_id]"
+                          cachedDataType="i4"
+                          cachedName="company_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[company_key]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[company_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[date_id]"
+                          cachedDataType="i4"
+                          cachedName="date_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[date_key]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[date_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[sector_id]"
+                          cachedDataType="i4"
+                          cachedName="sector_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[sector_key]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[sector_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].Columns[currency_id]"
+                          cachedDataType="i4"
+                          cachedName="currency_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[currency_key]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[currency_id]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[factSD_id]"
+                          dataType="i4"
+                          name="factSD_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[open]"
+                          dataType="r8"
+                          name="open" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[high]"
+                          dataType="r8"
+                          name="high" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[low]"
+                          dataType="r8"
+                          name="low" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[close]"
+                          dataType="r8"
+                          name="close" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[volume]"
+                          dataType="r8"
+                          name="volume" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[company_key]"
+                          dataType="i4"
+                          name="company_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[date_key]"
+                          dataType="i4"
+                          name="date_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[sector_key]"
+                          dataType="i4"
+                          name="sector_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input].ExternalColumns[currency_key]"
+                          dataType="i4"
+                          name="currency_key" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Star Schema\update StockDaily_Fact\temp daily fact"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="temp daily fact"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[stgDayFacts]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[company_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[company_id]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[company_id]"
+                          name="company_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[date_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[date_id]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[date_id]"
+                          name="date_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[open]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[open]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[open]"
+                          name="open"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[high]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[high]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[high]"
+                          name="high"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[low]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[low]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[low]"
+                          name="low"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[close]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[close]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[close]"
+                          name="close"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[volume]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[volume]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[volume]"
+                          name="volume"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[sector_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[sector_id]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[sector_id]"
+                          name="sector_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[currency_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[currency_id]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[currency_id]"
+                          name="currency_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[Daily_Date]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[Daily_Date]"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].Columns[Daily_Date]"
+                          name="Daily_Date"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[company_id]"
+                          dataType="i4"
+                          name="company_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[date_id]"
+                          dataType="i4"
+                          name="date_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[open]"
+                          dataType="r8"
+                          name="open" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[high]"
+                          dataType="r8"
+                          name="high" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[low]"
+                          dataType="r8"
+                          name="low" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[close]"
+                          dataType="r8"
+                          name="close" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[volume]"
+                          dataType="r8"
+                          name="volume" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[sector_id]"
+                          dataType="i4"
+                          name="sector_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[currency_id]"
+                          dataType="i4"
+                          name="currency_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output].ExternalColumns[Daily_Date]"
+                          dataType="dbDate"
+                          name="Daily_Date" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[company_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[company_id]"
+                          name="company_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[date_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[date_id]"
+                          name="date_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[open]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[open]"
+                          name="open" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[high]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[high]"
+                          name="high" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[low]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[low]"
+                          name="low" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[close]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[close]"
+                          name="close" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[volume]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[volume]"
+                          name="volume" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[sector_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[sector_id]"
+                          name="sector_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[currency_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[currency_id]"
+                          name="currency_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[Daily_Date]"
+                          dataType="dbDate"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[Daily_Date]"
+                          name="Daily_Date" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Star Schema\update StockDaily_Fact.Paths[OLE DB Source Output]"
+                  endId="Package\Star Schema\update StockDaily_Fact\actual daily fact.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Star Schema\update StockDaily_Fact\temp daily fact.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update StockQuarter_Fact"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{811ee7af-1df8-4b6e-83f0-a3dfa686f99a}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update StockQuarter_Fact"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Star Schema\update StockQuarter_Fact\actual fact"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="actual fact"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[FactStockQuarter]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[full_time_employees]"
+                          cachedDataType="r8"
+                          cachedName="full_time_employees"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[full_time_employees]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[full_time_employees]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[market_capitalization]"
+                          cachedDataType="r8"
+                          cachedName="market_capitalization"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[market_capitalization]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[market_capitalization]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[dividend_per_share]"
+                          cachedDataType="r8"
+                          cachedName="dividend_per_share"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[dividend_per_share]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_per_share]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[dividend_yield]"
+                          cachedDataType="r8"
+                          cachedName="dividend_yield"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[dividend_yield]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_yield]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[reported_EPS]"
+                          cachedDataType="r8"
+                          cachedName="reported_EPS"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[reported_EPS]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[reported_EPS]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[surprise_EPS]"
+                          cachedDataType="r8"
+                          cachedName="surprise_EPS"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[surprise_EPS]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[surprise_EPS]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[company_id]"
+                          cachedDataType="i4"
+                          cachedName="company_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[company_key]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[company_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[date_id]"
+                          cachedDataType="i4"
+                          cachedName="date_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[date_key]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[date_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[sector_id]"
+                          cachedDataType="i4"
+                          cachedName="sector_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[sector_key]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[sector_id]" />
+                        <inputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].Columns[currency_id]"
+                          cachedDataType="i4"
+                          cachedName="currency_id"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[currency_key]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[currency_id]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[factSQ_id]"
+                          dataType="i4"
+                          name="factSQ_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[full_time_employees]"
+                          dataType="i4"
+                          name="full_time_employees" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[market_capitalization]"
+                          dataType="r8"
+                          name="market_capitalization" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[dividend_per_share]"
+                          dataType="r8"
+                          name="dividend_per_share" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[dividend_yield]"
+                          dataType="r8"
+                          name="dividend_yield" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[reported_EPS]"
+                          dataType="r8"
+                          name="reported_EPS" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[surprise_EPS]"
+                          dataType="r8"
+                          name="surprise_EPS" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[company_key]"
+                          dataType="i4"
+                          name="company_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[date_key]"
+                          dataType="i4"
+                          name="date_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[sector_key]"
+                          dataType="i4"
+                          name="sector_key" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input].ExternalColumns[currency_key]"
+                          dataType="i4"
+                          name="currency_key" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\actual fact.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\actual fact.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\actual fact.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Star Schema\update StockQuarter_Fact\temp fact"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="temp fact"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[stgQuarterlyFacts]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.ExchangeAnalysisDW 1]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[company_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[company_id]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[company_id]"
+                          name="company_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[date_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[date_id]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[date_id]"
+                          name="date_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[sector_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[sector_id]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[sector_id]"
+                          name="sector_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[currency_id]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[currency_id]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[currency_id]"
+                          name="currency_id"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[symbol]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[symbol]"
+                          length="5"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[symbol]"
+                          name="symbol"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[name]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                          length="100"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[name]"
+                          name="name"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[address]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[address]"
+                          length="200"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[address]"
+                          name="address"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[sector]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[sector]"
+                          length="30"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[sector]"
+                          name="sector"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[currency]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[currency]"
+                          length="30"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[currency]"
+                          name="currency"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[full_time_employees]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[full_time_employees]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[full_time_employees]"
+                          name="full_time_employees"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[market_capitalization]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[market_capitalization]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[market_capitalization]"
+                          name="market_capitalization"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_per_share]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[dividend_per_share]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_per_share]"
+                          name="dividend_per_share"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_yield]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[dividend_yield]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[dividend_yield]"
+                          name="dividend_yield"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[reported_EPS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[reported_EPS]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[reported_EPS]"
+                          name="reported_EPS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[surprise_EPS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[surprise_EPS]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[surprise_EPS]"
+                          name="surprise_EPS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[fiscal_date_ending]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[fiscal_date_ending]"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].Columns[fiscal_date_ending]"
+                          name="fiscal_date_ending"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[company_id]"
+                          dataType="i4"
+                          name="company_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[date_id]"
+                          dataType="i4"
+                          name="date_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[sector_id]"
+                          dataType="i4"
+                          name="sector_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[currency_id]"
+                          dataType="i4"
+                          name="currency_id" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[symbol]"
+                          codePage="1252"
+                          dataType="str"
+                          length="5"
+                          name="symbol" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                          codePage="1252"
+                          dataType="str"
+                          length="100"
+                          name="name" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[address]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          name="address" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[sector]"
+                          codePage="1252"
+                          dataType="str"
+                          length="30"
+                          name="sector" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[currency]"
+                          codePage="1252"
+                          dataType="str"
+                          length="30"
+                          name="currency" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[full_time_employees]"
+                          dataType="i4"
+                          name="full_time_employees" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[market_capitalization]"
+                          dataType="r8"
+                          name="market_capitalization" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[dividend_per_share]"
+                          dataType="r8"
+                          name="dividend_per_share" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[dividend_yield]"
+                          dataType="r8"
+                          name="dividend_yield" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[reported_EPS]"
+                          dataType="r8"
+                          name="reported_EPS" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[surprise_EPS]"
+                          dataType="r8"
+                          name="surprise_EPS" />
+                        <externalMetadataColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output].ExternalColumns[fiscal_date_ending]"
+                          dataType="dbDate"
+                          name="fiscal_date_ending" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[company_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[company_id]"
+                          name="company_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[date_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[date_id]"
+                          name="date_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[sector_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[sector_id]"
+                          name="sector_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[currency_id]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[currency_id]"
+                          name="currency_id" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[symbol]"
+                          codePage="1252"
+                          dataType="str"
+                          length="5"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[symbol]"
+                          name="symbol" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[name]"
+                          codePage="1252"
+                          dataType="str"
+                          length="100"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[name]"
+                          name="name" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[address]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[address]"
+                          name="address" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[sector]"
+                          codePage="1252"
+                          dataType="str"
+                          length="30"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[sector]"
+                          name="sector" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[currency]"
+                          codePage="1252"
+                          dataType="str"
+                          length="30"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[currency]"
+                          name="currency" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[full_time_employees]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[full_time_employees]"
+                          name="full_time_employees" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[market_capitalization]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[market_capitalization]"
+                          name="market_capitalization" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[dividend_per_share]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[dividend_per_share]"
+                          name="dividend_per_share" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[dividend_yield]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[dividend_yield]"
+                          name="dividend_yield" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[reported_EPS]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[reported_EPS]"
+                          name="reported_EPS" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[surprise_EPS]"
+                          dataType="r8"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[surprise_EPS]"
+                          name="surprise_EPS" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[fiscal_date_ending]"
+                          dataType="dbDate"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[fiscal_date_ending]"
+                          name="fiscal_date_ending" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Star Schema\update StockQuarter_Fact.Paths[OLE DB Source Output]"
+                  endId="Package\Star Schema\update StockQuarter_Fact\actual fact.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Star Schema\update StockQuarter_Fact\temp fact.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update the ComapnyInfo into the Stg_QyuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{6c4675a5-9d8d-460e-a25b-041d30993cac}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update the ComapnyInfo into the Stg_QyuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="UPDATE stgQuarterlyFacts&#xA;SET &#xA;stgQuarterlyFacts.[symbol] = DimCompanyInfo.[symbol],&#xA;stgQuarterlyFacts.[name] = DimCompanyInfo.[name],&#xA;stgQuarterlyFacts.[address] = DimCompanyInfo.[address],&#xA;stgQuarterlyFacts.[sector] = DimCompanyInfo.sector&#xA;From [DimCompanyInfo]&#xA;JOIN stgQuarterlyFacts&#xA;ON DimCompanyInfo.[company_key] = stgQuarterlyFacts.[company_id]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update the income statement into the Stg_QuarFacts"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{1a645ba0-f952-4541-95c4-3e9dcce89f7f}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update the income statement into the Stg_QuarFacts"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="Update stgQuarterlyFacts Set stgQuarterlyFacts.[currency] = DimIncomeStatement.[reportedCurrency] From [DimIncomeStatement]&#xA;Join stgQuarterlyFacts&#xA;on DimIncomeStatement.company_id = stgQuarterlyFacts.company_id" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Star Schema\update the Sector_Dimension"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{5e319556-e7fe-426e-91fe-3f8c404f90bd}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="update the Sector_Dimension"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{A5BA670D-24BD-40E7-B522-3397261CA3EE}"
+              SQLTask:SqlStatementSource="INSERT INTO DimSector&#xA;( sector )&#xA;select distinct sector &#xA;from stgQuarterlyFacts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{9996e7cf-6ca0-46dc-ad5f-dec80dd1d4aa}"
+          DTS:From="Package\Star Schema\insert Earning info into Stg_QyuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Star Schema\update CompanyOverview into Stg_QyuarFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{5B00E449-CC68-4E54-8CB0-3BA0AC65EB15}"
+          DTS:From="Package\Star Schema\update the Sector_Dimension"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Star Schema\update currenct ID and sector ID in Stg_QyuarFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 10]"
+          DTS:CreationName=""
+          DTS:DTSID="{fce3b3a4-52ee-4a43-ae22-1cad59e2f8c8}"
+          DTS:From="Package\Star Schema\update the income statement into the Stg_QuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 10"
+          DTS:To="Package\Star Schema\update dataID into Stg_QyuarFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 11]"
+          DTS:CreationName=""
+          DTS:DTSID="{da94a898-a402-458b-a3d1-ff211152cb8c}"
+          DTS:From="Package\Star Schema\update the ComapnyInfo into the Stg_QyuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 11"
+          DTS:To="Package\Star Schema\update the income statement into the Stg_QuarFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 12]"
+          DTS:CreationName=""
+          DTS:DTSID="{037caeca-4cd7-4d77-970d-3d0965084047}"
+          DTS:From="Package\Star Schema\update dataID into Stg_QyuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 12"
+          DTS:To="Package\Star Schema\update the Sector_Dimension" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 13]"
+          DTS:CreationName=""
+          DTS:DTSID="{59c471f1-f3cc-40ed-92b4-742871f6edb2}"
+          DTS:From="Package\Star Schema\update StockDaily_Fact"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 13"
+          DTS:To="Package\Star Schema\update StockQuarter_Fact" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{422F4806-1048-4CEF-A7CC-2DFC0D5A72E2}"
+          DTS:From="Package\Star Schema\update current ID and sector ID in Stg_DayFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\Star Schema\TruncateTable" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 3]"
+          DTS:CreationName=""
+          DTS:DTSID="{3111FCEB-98B4-4E60-81C3-F58526EC7A7C}"
+          DTS:From="Package\Star Schema\TruncateTable"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 3"
+          DTS:To="Package\Star Schema\update StockDaily_Fact" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 4]"
+          DTS:CreationName=""
+          DTS:DTSID="{07b22f87-07e8-4897-9ec6-b344f8b54851}"
+          DTS:From="Package\Star Schema\update currenct ID and sector ID in Stg_QyuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 4"
+          DTS:To="Package\Star Schema\update current ID and sector ID in Stg_DayFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 5]"
+          DTS:CreationName=""
+          DTS:DTSID="{a30247df-a142-48e2-b100-7f417da5d360}"
+          DTS:From="Package\Star Schema\insert stockdata into Stg_DayFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 5"
+          DTS:To="Package\Star Schema\Populate Date_Dimension" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 6]"
+          DTS:CreationName=""
+          DTS:DTSID="{efdc2e04-d77e-473c-9e22-65cd6fd532a0}"
+          DTS:From="Package\Star Schema\Populate Date_Dimension"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 6"
+          DTS:To="Package\Star Schema\Update dateID into Stg_DayFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 7]"
+          DTS:CreationName=""
+          DTS:DTSID="{9cdbd07a-82f1-4e44-93cf-d225e9f1ef8d}"
+          DTS:From="Package\Star Schema\Update dateID into Stg_DayFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 7"
+          DTS:To="Package\Star Schema\insert Earning info into Stg_QyuarFacts" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Star Schema.PrecedenceConstraints[Constraint 9]"
+          DTS:CreationName=""
+          DTS:DTSID="{3e16d208-07b1-44bb-8cf9-3d20092eb250}"
+          DTS:From="Package\Star Schema\update CompanyOverview into Stg_QyuarFacts"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 9"
+          DTS:To="Package\Star Schema\update the ComapnyInfo into the Stg_QyuarFacts" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="262.4,41.6"
+          Id="Package\Star Schema\insert Earning info into Stg_QyuarFacts"
+          TopLeft="88.4999999999998,216.166666666667" />
+        <NodeLayout
+          Size="241.6,41.6"
+          Id="Package\Star Schema\insert stockdata into Stg_DayFacts"
+          TopLeft="95.5,5.5" />
+        <NodeLayout
+          Size="200,41.6"
+          Id="Package\Star Schema\Populate Date_Dimension"
+          TopLeft="110.166666666666,72.6666666666667" />
+        <NodeLayout
+          Size="145.6,41.6"
+          Id="Package\Star Schema\TruncateTable"
+          TopLeft="137.321428991474,1059.54999972937" />
+        <NodeLayout
+          Size="300.8,41.6"
+          Id="Package\Star Schema\update CompanyOverview into Stg_QyuarFacts"
+          TopLeft="69.9999999999995,291.166666666667" />
+        <NodeLayout
+          Size="324,41.6"
+          Id="Package\Star Schema\update currenct ID and sector ID in Stg_QyuarFacts"
+          TopLeft="57.0952380982786,824.872549101384" />
+        <NodeLayout
+          Size="308.8,41.6"
+          Id="Package\Star Schema\update current ID and sector ID in Stg_DayFacts"
+          TopLeft="86.2142857583806,908.127451080933" />
+        <NodeLayout
+          Size="244.8,41.6"
+          Id="Package\Star Schema\update dataID into Stg_QyuarFacts"
+          TopLeft="97.7142857264499,557.382352935144" />
+        <NodeLayout
+          Size="236,41.6"
+          Id="Package\Star Schema\Update dateID into Stg_DayFacts"
+          TopLeft="96.6666666666658,140.333333333333" />
+        <NodeLayout
+          Size="188.8,41.6"
+          Id="Package\Star Schema\update StockDaily_Fact"
+          TopLeft="119.999999999999,1131.48529409838" />
+        <NodeLayout
+          Size="201.6,41.6"
+          Id="Package\Star Schema\update StockQuarter_Fact"
+          TopLeft="109.214285710483,1217.70588233786" />
+        <NodeLayout
+          Size="312.8,41.6"
+          Id="Package\Star Schema\update the ComapnyInfo into the Stg_QyuarFacts"
+          TopLeft="66.6666666666661,373.666666666667" />
+        <NodeLayout
+          Size="328.8,41.6"
+          Id="Package\Star Schema\update the income statement into the Stg_QuarFacts"
+          TopLeft="53.4999999999995,466.862745096698" />
+        <NodeLayout
+          Size="217.6,41.6"
+          Id="Package\Star Schema\update the Sector_Dimension"
+          TopLeft="109.428571442256,695.088235244516" />
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint]"
+          TopLeft="220.05,257.766666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,33.4"
+              Start="0,0"
+              End="0,25.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,25.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 1]"
+          TopLeft="218.661904770267,736.688235244516">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,88.1843138568678"
+              Start="0,0"
+              End="0,80.6843138568678">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,80.6843138568678" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 10]"
+          TopLeft="219.007142863225,508.462745096698">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,48.9196078384454"
+              Start="0,0"
+              End="0,41.4196078384454">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,41.4196078384454" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 11]"
+          TopLeft="220.483333333333,415.266666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,51.5960784300312"
+              Start="0,0"
+              End="0,44.0960784300312">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.0960784300312" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 12]"
+          TopLeft="219.171428584353,598.982352935144">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,96.1058823093723"
+              Start="0,0"
+              End="0,88.6058823093723">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,88.6058823093723" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 13]"
+          TopLeft="212.207142855241,1173.08529409838">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44.6205882394834"
+              Start="0,0"
+              End="0,37.1205882394834">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37.1205882394834" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 2]"
+          TopLeft="240.614285758381,949.727451080933">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-30.4928567669066,109.822548648437"
+              Start="0,0"
+              End="-30.4928567669066,102.322548648437">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,50.9112743242187" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,50.9112743242187"
+                    Point2="0,54.9112743242187"
+                    Point3="-4,54.9112743242187" />
+                  <mssgle:LineSegment
+                    End="-26.4928567669066,54.9112743242187" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-26.4928567669066,54.9112743242187"
+                    Point2="-30.4928567669066,54.9112743242187"
+                    Point3="-30.4928567669066,58.9112743242187" />
+                  <mssgle:LineSegment
+                    End="-30.4928567669066,102.322548648437" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 3]"
+          TopLeft="212.260714495737,1101.14999972937">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,30.3352943690077"
+              Start="0,0"
+              End="0,22.8352943690077">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.8352943690077" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 4]"
+          TopLeft="219.095238098279,866.472549101384">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="21.5190476601019,41.6549019795488"
+              Start="0,0"
+              End="21.5190476601019,34.1549019795488">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.8274509897744" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.8274509897744"
+                    Point2="0,20.8274509897744"
+                    Point3="4,20.8274509897744" />
+                  <mssgle:LineSegment
+                    End="17.5190476601019,20.8274509897744" />
+                  <mssgle:CubicBezierSegment
+                    Point1="17.5190476601019,20.8274509897744"
+                    Point2="21.5190476601019,20.8274509897744"
+                    Point3="21.5190476601019,24.8274509897744" />
+                  <mssgle:LineSegment
+                    End="21.5190476601019,34.1549019795488" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 5]"
+          TopLeft="213.333333333333,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.1666666666667"
+              Start="0,0"
+              End="0,17.6666666666667">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17.6666666666667" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 6]"
+          TopLeft="212.416666666666,114.666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.6666666666666"
+              Start="0,0"
+              End="0,18.1666666666666">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.1666666666666" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 7]"
+          TopLeft="217.183333333333,181.933333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,34.233333333334"
+              Start="0,0"
+              End="0,26.733333333334">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.733333333334" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Star Schema.PrecedenceConstraints[Constraint 9]"
+          TopLeft="221.833333333333,333.166666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,40.5000000000001"
+              Start="0,0"
+              End="0,33.0000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.0000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="526.4,1380.8"
+          Size="526.4,1424"
+          Id="Package\Star Schema"
+          TopLeft="60,60" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Star Schema\update StockDaily_Fact">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="148.8,41.6"
+          Id="Package\Star Schema\update StockDaily_Fact\temp daily fact"
+          TopLeft="349.000000029802,50" />
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Star Schema\update StockDaily_Fact\actual daily fact"
+          TopLeft="603.999999970198,284" />
+        <EdgeLayout
+          Id="Package\Star Schema\update StockDaily_Fact.Paths[OLE DB Source Output]"
+          TopLeft="423.400000029802,91.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="256.999999940395,192.4"
+              Start="0,0"
+              End="256.999999940395,184.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,92.2" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,92.2"
+                    Point2="0,96.2"
+                    Point3="4,96.2" />
+                  <mssgle:LineSegment
+                    End="252.999999940395,96.2" />
+                  <mssgle:CubicBezierSegment
+                    Point1="252.999999940395,96.2"
+                    Point2="256.999999940395,96.2"
+                    Point3="256.999999940395,100.2" />
+                  <mssgle:LineSegment
+                    End="256.999999940395,184.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Star Schema\update StockDaily_Fact\actual daily fact">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Star Schema\update StockDaily_Fact\temp daily fact">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Star Schema\update StockQuarter_Fact">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="124,41.6"
+          Id="Package\Star Schema\update StockQuarter_Fact\temp fact"
+          TopLeft="251,52" />
+        <NodeLayout
+          Size="128,41.6"
+          Id="Package\Star Schema\update StockQuarter_Fact\actual fact"
+          TopLeft="577,281" />
+        <EdgeLayout
+          Id="Package\Star Schema\update StockQuarter_Fact.Paths[OLE DB Source Output]"
+          TopLeft="313,94">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="328,187"
+              Start="0,0"
+              End="328,179.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,89.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,89.5"
+                    Point2="0,93.5"
+                    Point3="4,93.5" />
+                  <mssgle:LineSegment
+                    End="324,93.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="324,93.5"
+                    Point2="328,93.5"
+                    Point3="328,97.5" />
+                  <mssgle:LineSegment
+                    End="328,179.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Star Schema\update StockQuarter_Fact\actual fact">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Star Schema\update StockQuarter_Fact\temp fact">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
